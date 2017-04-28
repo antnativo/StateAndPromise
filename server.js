@@ -29,8 +29,27 @@ function runState(contract,generator) {
     })
   }
 }
-
-var runTest = executeTest(["http://apple.com", "http://cnn.com", "http://fox.com", "http://google.com", "http://wsj.com","http://bloomberg.com"]);
-var done = false
-var result = runTest.next()
-runState(result,runTest)
+if (process.argv.length && process.argv[2] == "demo") {
+  var runTest = executeTest(['http://apple.com','http://cnn.com']),
+    done = false,
+    result = runTest.next();
+  runState(result, runTest)
+} else { 
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+  var util = require('util');
+  process.stdin.on('data', function (text) {
+    if (text === 'quit\n') {
+      process.exit();
+    } else {
+      console.log(util.inspect(text))
+      var urls = text.split(",")
+      if (urls.length) {
+        var runTest = executeTest(urls),
+          done = false,
+          result = runTest.next();
+        runState(result, runTest)
+      }
+    }
+  });
+}
