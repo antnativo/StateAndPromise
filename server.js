@@ -2,11 +2,11 @@ var request = require("request")
 function getSite(url,time) {
   var url = url
   return new Promise(function (resolve,reject){
-  request(url, function (error, response, body) {
+  request("http://" + url, function (error, response, body) {
       if (error)
         return reject(error)
       else
-      return resolve(url + "\n" +  body + "\n" + "--------------------------------------------------------------------------" + "\r")
+      return resolve("http://" + url + "\n" +  body + "\n" + "--------------------------------------------------------------------------" + "\r")
    })
   })
 }
@@ -30,7 +30,7 @@ function runState(contract,generator) {
   }
 }
 if (process.argv.length && process.argv[2] == "demo") {
-  var runTest = executeTest(['http://apple.com','http://cnn.com']),
+  var runTest = executeTest(['apple.com','cnn.com']),
     done = false,
     result = runTest.next();
   runState(result, runTest)
